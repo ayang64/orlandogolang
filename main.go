@@ -44,17 +44,22 @@ func main() {
 		log.Fatalf("Could not listen on %s://%s: %s", *network, *address, err)
 	}
 
-	defer func() {
-		// remove socket file once we exit. this requires that we catch handle SIGINT
-		if *network == "unix" {
+	if *network == "unix" {
+		err := os.Chmod(*address, 0777)
+
+		if err != nil {
+			log.Fatalf("could not set permissions of socket file %s to 0777: %s", *address, err)
+		}
+
+		defer func() {
+			// remove socket file once we exit. this requires that we catch handle SIGINT
 			err := os.Remove(*address)
 			if err != nil {
 				log.Fatal("Could not delete %s: %s", *address, err)
 			}
 			log.Printf("Cleaned up socket file: %s", *address)
-		}
-		log.Printf("Exiting.")
-	}()
+		}()
+	}
 
 	log.Printf("Lisening on %q type socket at %q.", *network, *address)
 
