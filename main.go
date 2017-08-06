@@ -27,6 +27,8 @@ func PostgresConnect(user, host, database string) (*sql.DB, error) {
 }
 
 func main() {
+	log.SetFlags(log.LstdFlags  | log.Lshortfile | log.LUTC)
+
 	default_dbhost := "localhost"
 	switch runtime.GOOS {
 	case "linux":
@@ -43,7 +45,7 @@ func main() {
 
 	flag.Parse()
 
-	db, err := PostgresConnect(*dbname, *dbuser, *dbhost)
+	db, err := PostgresConnect(*dbuser, *dbhost, *dbname)
 
 	if err != nil {
 		log.Fatal(err)
