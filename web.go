@@ -29,7 +29,7 @@ func (d DebugTemplate) Render(w io.Writer, name string, data interface{}) error 
 	return t.ExecuteTemplate(w, name, data)
 }
 
-func Webserver(network string, address string, db *sql.DB) {
+func Webserver(stop chan struct{}, network string, address string, db *sql.DB, root string /* not used at the moment */) {
 	l, err := net.Listen(network, address)
 
 	if err != nil {
@@ -51,6 +51,7 @@ func Webserver(network string, address string, db *sql.DB) {
 				log.Fatalf("Could not delete %s: %s", address, err)
 			}
 			log.Printf("Cleaned up socket file: %s", address)
+			stop <- struct{}{}
 		}()
 	}
 
@@ -95,5 +96,9 @@ func Webserver(network string, address string, db *sql.DB) {
 	http.Handle("/images/", http.StripPrefix("/images", http.FileServer(http.Dir("assets/images"))))
 	http.Handle("/css/", http.StripPrefix("/css", http.FileServer(http.Dir("assets/css"))))
 
-	http.Serve(l, nil)
+	go http.Serve(l, nil)
+
+	<-stop
+
+
 }
