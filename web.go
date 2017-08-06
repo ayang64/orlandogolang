@@ -100,5 +100,4 @@ func Webserver(stop chan struct{}, network string, address string, db *sql.DB, r
 
 	<-stop
 
-
 }

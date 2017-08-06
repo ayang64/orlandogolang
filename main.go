@@ -27,7 +27,7 @@ func PostgresConnect(user, host, database string) (*sql.DB, error) {
 }
 
 func main() {
-	log.SetFlags(log.LstdFlags  | log.Lshortfile | log.LUTC)
+	log.SetFlags(log.LstdFlags | log.Lshortfile | log.LUTC)
 
 	default_dbhost := "localhost"
 	switch runtime.GOOS {
@@ -41,8 +41,7 @@ func main() {
 	dbuser := flag.String("dbuser", "ayan", "Database user to connect as.")
 	dbhost := flag.String("dbhost", default_dbhost, "Unix-domain socket path or hostname of db server to use.")
 
-
-	webroot	:=	flag.String("webroot", "./assets", "Direcotry where web assets reside.")
+	webroot := flag.String("webroot", "./assets", "Direcotry where web assets reside.")
 	network := flag.String("net", "tcp", "Network to listen on.  Should be either \"tcp\" or \"unix\"")
 	address := flag.String("addr", "localhost:9898", "Address to listen on.  This should be apropriate to the network chosen.")
 
@@ -71,7 +70,7 @@ func main() {
 	webstop <- struct{}{}
 
 	// Wait for web server to clean up after itself.
-	<- webstop
+	<-webstop
 
 	// fin
 }

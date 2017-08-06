@@ -27,7 +27,6 @@ func UpdateMeetupDatabase(db *sql.DB) {
 
 		validmeetups := []string{}
 
-
 		// FIXME: This is really ugly.  This is screaming for a stored procedure to
 		// handle/hide all of the update ugliness.
 		for i := range event {
