@@ -8,12 +8,13 @@ import (
 )
 
 type Event struct {
-	Created     uint   `json:"created"`
-	Time        uint   `json:"time"`
-	Updated     uint   `json:"updated"`
-	RSVPLimit   uint   `json:"rsvp_limit"`
-	RSVPed      uint   `json:"yes_rsvp_count"`
+	Time        int   `json:"time"` 
+	Created     int   `json:"created"`
+	Updated     int   `json:"updated"`
+	RSVPLimit   int   `json:"rsvp_limit"`
+	RSVPed      int   `json:"yes_rsvp_count"`
 	Link        string `json:"link"`
+	Name				string `json:"name"`
 	Description string `json:"description"`
 	Id          string `json:"id"`
 }
@@ -22,7 +23,7 @@ func GetEvents(name string) ([]Event, error) {
 	resp, err := http.Get(
 		"https://api.meetup.com/" +
 			name +
-			"/events?&sign=true&status=past,upcoming&photo-host=public")
+			"/events?&sign=true&status=upcoming&photo-host=public")
 
 	if err != nil {
 		return nil, err

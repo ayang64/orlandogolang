@@ -27,10 +27,21 @@
 		</p>
 		<p>
 			Our in-person meetings are held on the <b>third Monday</b> of every
-			month.  Our next meeting will be <b>Monday, August 21</b>. They are
+			month.  Our next meeting will be <b>{{.NextMeeting}}</b>. They are
 			usually held at Familab in Longwood but we're looking for a more
 			permanent home nearer to down town.
 		</p>
+
+		<h1>Upcoming Meetups</h1>
+
+	
+		<style>
+			ul.altlist li:nth-child(even) {background: lightgrey;}
+		</style>
+		<ul class='altlist'>
+		{{range .Meetings}}	<li>{{.Time}} - <a href='{{.URL}}'>{{.Name}}</a></li>
+		{{end}}
+		</ul>
 
 		<p>
 			Join the <a href='https://www.meetup.com/OrlandoGolang/'>Orlando
