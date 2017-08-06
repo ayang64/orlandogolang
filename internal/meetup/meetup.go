@@ -5,22 +5,28 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"time"
 )
 
 type Event struct {
-	Time        int   `json:"time"` 
-	Created     int   `json:"created"`
-	Updated     int   `json:"updated"`
-	RSVPLimit   int   `json:"rsvp_limit"`
-	RSVPed      int   `json:"yes_rsvp_count"`
+	Time        int    `json:"time"`
+	Created     int    `json:"created"`
+	Updated     int    `json:"updated"`
+	RSVPLimit   int    `json:"rsvp_limit"`
+	RSVPed      int    `json:"yes_rsvp_count"`
 	Link        string `json:"link"`
-	Name				string `json:"name"`
+	Name        string `json:"name"`
 	Description string `json:"description"`
 	Id          string `json:"id"`
 }
 
 func GetEvents(name string) ([]Event, error) {
-	resp, err := http.Get(
+
+	client := http.Client{
+		Timeout: time.Second * 5,
+	}
+
+	resp, err := client.Get(
 		"https://api.meetup.com/" +
 			name +
 			"/events?&sign=true&status=upcoming&photo-host=public")
