@@ -8,29 +8,7 @@ import (
 	"time"
 )
 
-func UpdateMeetupDatabase(db *sql.DB) {
-	for {
-		golangevents, err := meetup.GetEvents("OrlandoGolang")
-
-		if err != nil {
-			log.Printf("error fetching OrlandoGolang events.")
-		}
-
-		gophersevents, err := meetup.GetEvents("OrlandoGophers")
-
-		if err != nil {
-			log.Printf("error fetching OrlandoGophers events.")
-			continue
-		}
-
-		event := append(golangevents, gophersevents...)
-
-		validmeetups := []string{}
-
-		// FIXME: This is really ugly.  This is screaming for a stored procedure to
-		// handle/hide all of the update ugliness.
-		for i := range event {
-			validmeetups = append(validmeetups, event[i].Id)
+func InsertEvent(db *sql.DB, event meetup.Event) error {
 			_, err := db.Exec(`
 								INSERT INTO
 										meetups (id, time, created, updated, rsvp_limit, rsvp_count, url, name, description, meetupid)
@@ -57,27 +35,54 @@ func UpdateMeetupDatabase(db *sql.DB) {
 											url=$15,
 											name=$16,
 											description=$17;`,
-				event[i].Time,
-				event[i].Created,
-				event[i].Updated,
-				event[i].RSVPLimit,
-				event[i].RSVPed,
-				event[i].Link,
-				event[i].Name,
-				event[i].Description,
-				event[i].Id,
+				event.Time,
+				event.Created,
+				event.Updated,
+				event.RSVPLimit,
+				event.RSVPed,
+				event.Link,
+				event.Name,
+				event.Description,
+				event.Id,
 
-				event[i].Time,
-				event[i].Created,
-				event[i].Updated,
-				event[i].RSVPLimit,
-				event[i].RSVPed,
-				event[i].Link,
-				event[i].Name,
-				event[i].Description)
+				event.Time,
+				event.Created,
+				event.Updated,
+				event.RSVPLimit,
+				event.RSVPed,
+				event.Link,
+				event.Name,
+				event.Description)
 
-			if err != nil {
-				log.Printf("ERROR: %s", err)
+	return err
+}
+
+func UpdateMeetupDatabase(db *sql.DB) {
+	for {
+		golangevents, err := meetup.GetEvents("OrlandoGolang")
+
+		if err != nil {
+			log.Printf("error fetching OrlandoGolang events.")
+		}
+
+		gophersevents, err := meetup.GetEvents("OrlandoGophers")
+
+		if err != nil {
+			log.Printf("error fetching OrlandoGophers events.")
+			continue
+		}
+
+		event := append(golangevents, gophersevents...)
+
+		validmeetups := []string{}
+
+		// FIXME: This is really ugly.  This is screaming for a stored procedure to
+		// handle/hide all of the update ugliness.
+		for i := range event {
+			validmeetups = append(validmeetups, event[i].Id)
+
+			if err := InsertEvent(db, event[i]); err != nil {
+				log.Printf("error inserting event: %s", err)
 			}
 		}
 
