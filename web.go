@@ -48,7 +48,7 @@ func Webserver(network string, address string, db *sql.DB) {
 			// remove socket file once we exit. this requires that we catch handle SIGINT
 			err := os.Remove(address)
 			if err != nil {
-				log.Fatal("Could not delete %s: %s", address, err)
+				log.Fatalf("Could not delete %s: %s", address, err)
 			}
 			log.Printf("Cleaned up socket file: %s", address)
 		}()
