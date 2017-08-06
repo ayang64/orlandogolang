@@ -27,6 +27,9 @@ func UpdateMeetupDatabase(db *sql.DB) {
 
 		validmeetups := []string{}
 
+
+		// FIXME: This is really ugly.  This is screaming for a stored procedure to
+		// handle/hide all of the update ugliness.
 		for i := range event {
 			validmeetups = append(validmeetups, event[i].Id)
 			_, err := db.Exec(`
@@ -77,9 +80,9 @@ func UpdateMeetupDatabase(db *sql.DB) {
 			if err != nil {
 				log.Printf("ERROR: %s", err)
 			}
-
 		}
 
+		// FIXME: We should probably increase the poll interval to something like 15 minutes.
 		time.Sleep(30 * time.Second)
 	}
 }
