@@ -9,7 +9,7 @@ import (
 )
 
 func InsertEvent(db *sql.DB, event meetup.Event) error {
-			_, err := db.Exec(`
+	_, err := db.Exec(`
 								INSERT INTO
 										meetups (id, time, created, updated, rsvp_limit, rsvp_count, url, name, description, meetupid)
 								VALUES (
@@ -35,24 +35,24 @@ func InsertEvent(db *sql.DB, event meetup.Event) error {
 											url=$15,
 											name=$16,
 											description=$17;`,
-				event.Time,
-				event.Created,
-				event.Updated,
-				event.RSVPLimit,
-				event.RSVPed,
-				event.Link,
-				event.Name,
-				event.Description,
-				event.Id,
+		event.Time,
+		event.Created,
+		event.Updated,
+		event.RSVPLimit,
+		event.RSVPed,
+		event.Link,
+		event.Name,
+		event.Description,
+		event.Id,
 
-				event.Time,
-				event.Created,
-				event.Updated,
-				event.RSVPLimit,
-				event.RSVPed,
-				event.Link,
-				event.Name,
-				event.Description)
+		event.Time,
+		event.Created,
+		event.Updated,
+		event.RSVPLimit,
+		event.RSVPed,
+		event.Link,
+		event.Name,
+		event.Description)
 
 	return err
 }
