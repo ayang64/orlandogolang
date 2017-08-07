@@ -51,7 +51,6 @@ func Webserver(stop chan struct{}, network string, address string, db *sql.DB, r
 				log.Fatalf("Could not delete %s: %s", address, err)
 			}
 			log.Printf("Cleaned up socket file: %s", address)
-			stop <- struct{}{}
 		}()
 	}
 
@@ -96,6 +95,7 @@ func Webserver(stop chan struct{}, network string, address string, db *sql.DB, r
 	http.Handle("/images/", http.StripPrefix("/images", http.FileServer(http.Dir("assets/images"))))
 	http.Handle("/css/", http.StripPrefix("/css", http.FileServer(http.Dir("assets/css"))))
 
+	defer func() { stop <- struct{}{} }()
 	go http.Serve(l, nil)
 
 	<-stop
