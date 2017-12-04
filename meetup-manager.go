@@ -1,7 +1,7 @@
 package main
 
 import (
-	"./internal/meetup"
+	"github.com/ayang64/orlandogolang/internal/meetup"
 
 	"database/sql"
 	"log"
